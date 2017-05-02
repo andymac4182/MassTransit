@@ -28,56 +28,53 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard1.6'">
+    <DefineConstants>NETCORE</DefineConstants>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 	<SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\MassTransit.snk</AssemblyOriginatorKeyFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="Transports\HttpEndpoint.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net452'">
+    <Compile Remove="NetCore.cs" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.6'">
     <Compile Remove="TransactionContext.cs" />
     <Compile Remove="TransactionContextExtensions.cs" />
     <Compile Remove="PerformanceCounterExtensions.cs" />
-    <Compile Remove="Transports/HttpEndpoint.cs" />
-    <Compile Remove="Util/NHProfIntegration.cs" />
-    <Compile Remove="Pipeline/Filters/TransactionFilter.cs" />
-    <Compile Remove="Context/SystemTransactionContext.cs" />
-    <Compile Remove="Configuration/ITransactionConfigurator.cs" />
-    <Compile Remove="Configuration/TransactionConfiguratorExtensions.cs" />
-    <Compile Remove="Configuration/BusConfigurators/PerformanceCounterBusFactorySpecification.cs" />
-    <Compile Remove="Configuration/PipeConfigurators/TransactionPipeSpecification.cs" />
-    <Compile Remove="Serialization/StaticHeaders.cs" />
-    <Compile Remove="Serialization/StaticConsumeContext.cs" />
-    <Compile Remove="Serialization/ExtensionsForBinaryMessageSerializer.cs" />
-    <Compile Remove="Serialization/BinaryMessageSerializer.cs" />
-    <Compile Remove="Serialization/BinaryMessageDeserializer.cs" />
-    <Compile Remove="Monitoring/Performance/BusPerformanceCounters.cs" />
-    <Compile Remove="Monitoring/Performance/ConsumerPerformanceCounter.cs" />
-    <Compile Remove="Monitoring/Performance/ConsumerPerformanceCounterCache.cs" />
-    <Compile Remove="Monitoring/Performance/ConsumerPerformanceCounters.cs" />
-    <Compile Remove="Monitoring/Performance/IConsumerPerformanceCounter.cs" />
-    <Compile Remove="Monitoring/Performance/IMessagePerformanceCounter.cs" />
-    <Compile Remove="Monitoring/Performance/InstancePerformanceCounter.cs" />
-    <Compile Remove="Monitoring/Performance/IPerformanceCounter.cs" />
-    <Compile Remove="Monitoring/Performance/ISendPerformanceCounter.cs" />
-    <Compile Remove="Monitoring/Performance/MessagePerformanceCounter.cs" />
-    <Compile Remove="Monitoring/Performance/MessagePerformanceCounterCache.cs" />
-    <Compile Remove="Monitoring/Performance/MessagePerformanceCounters.cs" />
-    <Compile Remove="Monitoring/Performance/NullPerformanceCounter.cs" />
-    <Compile Remove="Monitoring/Performance/PerformanceCounterBusObserver.cs" />
-    <Compile Remove="Monitoring/Performance/PerformanceCounterPublishObserver.cs" />
-    <Compile Remove="Monitoring/Performance/PerformanceCounterReceiveObserver.cs" />
-    <Compile Remove="Monitoring/Performance/PerformanceCounters.cs" />
-    <Compile Remove="Monitoring/Performance/PerformanceCounterSendObserver.cs" />
+    <Compile Remove="Transports\HttpEndpoint.cs" />
+    <Compile Remove="Util\NHProfIntegration.cs" />
+    <Compile Remove="Pipeline\Filters\TransactionFilter.cs" />
+    <Compile Remove="Context\SystemTransactionContext.cs" />
+    <Compile Remove="Configuration\ITransactionConfigurator.cs" />
+    <Compile Remove="Configuration\TransactionConfiguratorExtensions.cs" />
+    <Compile Remove="Configuration\BusConfigurators\PerformanceCounterBusFactorySpecification.cs" />
+    <Compile Remove="Configuration\PipeConfigurators\TransactionPipeSpecification.cs" />
+    <Compile Remove="Serialization\StaticHeaders.cs" />
+    <Compile Remove="Serialization\StaticConsumeContext.cs" />
+    <Compile Remove="Serialization\ExtensionsForBinaryMessageSerializer.cs" />
+    <Compile Remove="Serialization\BinaryMessageSerializer.cs" />
+    <Compile Remove="Serialization\BinaryMessageDeserializer.cs" />
+    <Compile Remove="Monitoring\Performance\Windows\**" />
+    <Compile Remove="Monitoring\Performance\ConsumerPerformanceCounterCache.cs" />
+    <Compile Remove="Monitoring\Performance\MessagePerformanceCounterCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GreenPipes" Version="1.0.9" />
     <PackageReference Include="NewId" Version="3.0.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
     <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.1" />
+    <PackageReference Include="System.Threading.Tasks.Parallel" Version="4.3.0" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.6'">
+    <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.FileVersionInfo" Version="4.3.0" />
+    <PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net452'">
     <Reference Include="System" />
