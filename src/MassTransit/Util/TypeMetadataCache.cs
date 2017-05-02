@@ -136,7 +136,7 @@ namespace MassTransit.Util
             if (typeof(T).Namespace == null)
                 return false;
 
-            if (typeof(T).Assembly == typeof(object).Assembly)
+            if (typeof(T).GetTypeInfo().Assembly == typeof(object).GetTypeInfo().Assembly)
                 return false;
 
             if (typeof(T).Namespace == "System")
@@ -146,7 +146,7 @@ namespace MassTransit.Util
             if (ns != null && ns.StartsWith("System."))
                 return false;
 
-            if (typeof(T).IsGenericType)
+            if (typeof(T).GetTypeInfo().IsGenericType)
             {
                 var typeDefinition = typeof(T).GetGenericTypeDefinition();
                 if (typeDefinition == typeof(CorrelatedBy<>))
@@ -170,8 +170,8 @@ namespace MassTransit.Util
 
         bool CheckIfTemporaryMessageType(Type messageType)
         {
-            return (!messageType.IsVisible && messageType.IsClass)
-                || (messageType.IsGenericType && messageType.GetGenericArguments().Any(CheckIfTemporaryMessageType));
+            return (!messageType.GetTypeInfo().IsVisible && messageType.GetTypeInfo().IsClass)
+                || (messageType.GetTypeInfo().IsGenericType && messageType.GetGenericArguments().Any(CheckIfTemporaryMessageType));
         }
 
         /// <summary>
@@ -185,12 +185,12 @@ namespace MassTransit.Util
             if (IsValidMessageType)
                 yield return typeof(T);
 
-            var baseType = typeof(T).BaseType;
+            var baseType = typeof(T).GetTypeInfo().BaseType;
             while ((baseType != null) && TypeMetadataCache.IsValidMessageType(baseType))
             {
                 yield return baseType;
 
-                baseType = baseType.BaseType;
+                baseType = baseType.GetTypeInfo().BaseType;
             }
 
             IEnumerable<Type> interfaces = typeof(T)

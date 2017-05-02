@@ -29,14 +29,21 @@ namespace MassTransit.Util
         {
             MachineName = Environment.MachineName;
 
-            MassTransitVersion = GetAssemblyInformationalVersion(typeof(IBus).Assembly);
+#if NETCORE
+            FrameworkVersion = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription;
+            OperatingSystemVersion = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
+            var entryAssembly = System.Reflection.Assembly.GetEntryAssembly();
+#else
             FrameworkVersion = Environment.Version.ToString();
             OperatingSystemVersion = Environment.OSVersion.ToString();
+            var entryAssembly = System.Reflection.Assembly.GetEntryAssembly() ?? System.Reflection.Assembly.GetCallingAssembly();
+#endif
+
+            MassTransitVersion = GetAssemblyInformationalVersion(typeof(IBus).GetTypeInfo().Assembly);
             var currentProcess = Process.GetCurrentProcess();
             ProcessId = currentProcess.Id;
             ProcessName = currentProcess.ProcessName;
 
-            var entryAssembly = System.Reflection.Assembly.GetEntryAssembly() ?? System.Reflection.Assembly.GetCallingAssembly();
             var assemblyName = entryAssembly.GetName();
             Assembly = assemblyName.Name;
             AssemblyVersion = GetAssemblyFileVersion(entryAssembly);
